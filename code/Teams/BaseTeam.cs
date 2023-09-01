@@ -41,6 +41,20 @@ public abstract partial class BaseTeam : Entity
 		}
 	}
 
+	public IReadOnlyList<Player> Players
+	{
+		get
+		{
+			List<Player> players = new(Player.All);
+
+			foreach ( var player in players )
+				if ( player.Team != this )
+					players.Remove( player );
+
+			return players.AsReadOnly();
+		}
+	}
+
 	public abstract new string Name { get; }
 	public abstract ColorHsv Color { get; }
 
