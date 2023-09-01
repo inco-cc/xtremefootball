@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sandbox;
 using Editor;
 
-namespace XtremeFootball;
+namespace XtremeFootball.Teams;
 
 public enum TeamSide
 {
@@ -13,12 +13,12 @@ public enum TeamSide
 
 [Category( "Xtreme Football" )]
 [Icon( "groups" )]
-public abstract partial class Team : Entity
+public abstract partial class BaseTeam : Entity
 {
-	private static readonly List<Team> all = new();
-	public static new IReadOnlyList<Team> All => all.AsReadOnly();
+	private static readonly List<BaseTeam> all = new();
+	public static new IReadOnlyList<BaseTeam> All => all.AsReadOnly();
 
-	public static Team Home
+	public static BaseTeam Home
 	{
 		get
 		{
@@ -29,7 +29,7 @@ public abstract partial class Team : Entity
 			return null;
 		}
 	}
-	public static Team Away
+	public static BaseTeam Away
 	{
 		get
 		{
@@ -48,7 +48,7 @@ public abstract partial class Team : Entity
 
 	[Net] public uint Goals { get; set; }
 
-	public Team()
+	public BaseTeam()
 	{
 		Transmit = TransmitType.Always;
 

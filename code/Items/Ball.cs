@@ -2,32 +2,31 @@
 using Sandbox;
 using Editor;
 
-namespace XtremeFootball;
+namespace XtremeFootball.Items;
 
 [ClassName( "item_ball" )]
 [Icon( "sports_football" )]
 [HammerEntity]
-public partial class Ball : Item
+public partial class Ball : BaseItem
 {
 	public static Ball Current { get; private set; }
 
 	[Net] public Vector3 ResetPosition { get; protected set; }
 	[Net] public Rotation ResetRotation { get; protected set; }
 
-	private Sound flySound;
-	private float flySpeed;
+	private Sound singSound;
+	private float singSpeed;
 
 	public Ball()
 	{
-		if ( Sandbox.Game.IsServer )
+		if ( Game.IsServer )
 		{
 			ResetPosition = Position;
 			ResetRotation = Rotation;
 		}
 
-		if ( Sandbox.Game.IsClient )
-			flySound = PlaySound( "ball_fly" );
-			
+		if ( Game.IsClient )
+			singSound = PlaySound( "ball_sing" );
 
 		if ( Current != null && Current.IsValid )
 			Current.Delete();
@@ -69,42 +68,46 @@ public partial class Ball : Item
 		Reset();
 	}
 
-#if DEBUG
-	[ConCmd.Admin( "xf_ball_reset" )]
-#endif
-	public static void Reset()
+	public void Reset()
 	{
-		Sound.FromWorld( "ball_explode", Current.Position );
+		Sound.FromWorld( "ball_explode", Position );
 
-		Current.Position = Current.ResetPosition;
-		Current.Rotation = Current.ResetRotation;
+		Position = ResetPosition;
+		Rotation = ResetRotation;
 
-		Current.Velocity = Vector3.Zero;
-		Current.AngularVelocity = Angles.Zero;
+		Velocity = Vector3.Zero;
+		AngularVelocity = Angles.Zero;
 
-		Current.ResetExpireTime();
+		ResetExpireTime();
 
-		Event.Run( "ball.reset" );
+		Event.Run( "ball.reset", this );
 	}
 
-	[GameEvent.Entity.PostSpawn]
-	protected static void AutoCreate()
+	[Sandbox.GameEvent.Entity.PostSpawn]
+	protected static void AutoSpawn()
 	{
 		if ( Current == null || !Current.IsValid )
 			_ = new Ball();
 	}
 
-	[GameEvent.Tick.Client]
-	protected void UpdateFlySound()
+	[Sandbox.GameEvent.Tick.Client]
+	protected void UpdateSingSound()
 	{
-		flySpeed = MathX.Approach( flySpeed, Velocity.Length, Time.Delta * 3500 );
+		singSpeed = MathX.Approach( singSpeed, Velocity.Length, Time.Delta * 3500 );
 
 		if ( Owner != null && Owner.IsValid )
-			flySound.SetVolume( 0 );
+			singSound.SetVolume( 0 );
 		else
 		{
-			flySound.SetVolume( MathF.Pow( MathX.Clamp( flySpeed / 1000, .05f, .9f ), .5f ) );
-			flySound.SetPitch( .75f + MathX.Clamp( flySpeed / 1500, 0, 1 ) );
+			singSound.SetVolume( MathF.Pow( MathX.Clamp( singSpeed / 1000, .05f, .9f ), .5f ) );
+			singSound.SetPitch( .75f + MathX.Clamp( singSpeed / 1500, 0, 1 ) );
 		}
+	}
+
+	[ConCmd.Admin( "xf_ball_reset" )]
+	protected static void ResetCommand()
+	{
+		if ( Current != null && Current.IsValid )
+			Current.Reset();
 	}
 }

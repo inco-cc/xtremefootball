@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using Sandbox;
 using Editor;
 
-namespace XtremeFootball;
+namespace XtremeFootball.Items;
 
 [Category( "Xtreme Football" )]
 [Icon( "propane_tank" )]
-public abstract partial class Item : Prop
+public abstract partial class BaseItem : Prop
 {
-	private static readonly List<Item> all = new();
-	public static new IReadOnlyList<Item> All => all.AsReadOnly();
+	private static readonly List<BaseItem> all = new();
+	public static new IReadOnlyList<BaseItem> All => all.AsReadOnly();
 
 	public virtual uint ExpireDelay { get; } = 20;
 	[Net] public float ExpireTime { get; protected set; }
 	public bool IsExpired => Time.Now >= ExpireTime;
 
-	public Item()
+	public BaseItem()
 	{
 		all.Add( this );
 	}
@@ -43,14 +43,14 @@ public abstract partial class Item : Prop
 		ExpireTime = -1;
 	}
 
-	[GameEvent.Tick.Server]
-	protected void ExpireTick()
+	[Sandbox.GameEvent.Tick.Server]
+	protected void AutoExpire()
 	{
 		if ( IsExpired )
 		{
 			Event.Run( "item.expire", this );
 
 			Expire();
-		}	
+		}
 	}
 }

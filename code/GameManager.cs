@@ -4,6 +4,6 @@ using Editor;
 
 namespace XtremeFootball;
 
-public partial class Game : GameManager
+public partial class GameManager : Sandbox.GameManager
 {
 }
