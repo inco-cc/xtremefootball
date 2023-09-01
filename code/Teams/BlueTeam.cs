@@ -4,8 +4,7 @@ using Editor;
 
 namespace XtremeFootball.Teams;
 
-[ClassName( "team_blue" )]
-[HammerEntity]
+[ClassName( "team_blue" ), HammerEntity]
 public partial class BlueTeam : BaseTeam
 {
 	public override string Name { get; } = "Blue Bulls";
@@ -14,7 +13,6 @@ public partial class BlueTeam : BaseTeam
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoCreate()
 	{
-		if ( Away == null )
-			_ = new BlueTeam() { Side = TeamSide.Away };
+		_ = Away ?? new BlueTeam() { Side = TeamSide.Away };
 	}
 }

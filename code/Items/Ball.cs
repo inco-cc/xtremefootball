@@ -4,9 +4,7 @@ using Editor;
 
 namespace XtremeFootball.Items;
 
-[ClassName( "item_ball" )]
-[Icon( "sports_football" )]
-[HammerEntity]
+[ClassName( "item_ball" ), Icon( "sports_football" ), HammerEntity]
 public partial class Ball : BaseItem
 {
 	public static Ball Current { get; private set; }
@@ -14,11 +12,13 @@ public partial class Ball : BaseItem
 	[Net] public Vector3 ResetPosition { get; protected set; }
 	[Net] public Rotation ResetRotation { get; protected set; }
 
-	private Sound singSound;
-	private float singSpeed;
+	private Sound flySound;
+	private float flySpeed;
 
 	public Ball()
 	{
+		Transmit = TransmitType.Always;
+
 		if ( Game.IsServer )
 		{
 			ResetPosition = Position;
@@ -26,10 +26,9 @@ public partial class Ball : BaseItem
 		}
 
 		if ( Game.IsClient )
-			singSound = PlaySound( "ball_sing" );
+			flySound = PlaySound( "ball_fly" );
 
-		if ( Current != null && Current.IsValid )
-			Current.Delete();
+		Current?.Delete();
 
 		Current = this;
 	}
@@ -86,28 +85,26 @@ public partial class Ball : BaseItem
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoSpawn()
 	{
-		if ( Current == null || !Current.IsValid )
-			_ = new Ball();
+		_ = Current ?? new();
 	}
 
 	[Sandbox.GameEvent.Tick.Client]
 	protected void UpdateSingSound()
 	{
-		singSpeed = MathX.Approach( singSpeed, Velocity.Length, Time.Delta * 3500 );
+		flySpeed = MathX.Approach( flySpeed, Velocity.Length, Time.Delta * 3500 );
 
-		if ( Owner != null && Owner.IsValid )
-			singSound.SetVolume( 0 );
-		else
+		if ( Owner is null )
 		{
-			singSound.SetVolume( MathF.Pow( MathX.Clamp( singSpeed / 1000, .05f, .9f ), .5f ) );
-			singSound.SetPitch( .75f + MathX.Clamp( singSpeed / 1500, 0, 1 ) );
+			flySound.SetVolume( MathF.Pow( MathX.Clamp( flySpeed / 1000, .05f, .9f ), .5f ) );
+			flySound.SetPitch( .75f + MathX.Clamp( flySpeed / 1500, 0, 1 ) );
 		}
+		else
+			flySound.SetVolume( 0 );
 	}
 
 	[ConCmd.Admin( "xf_ball_reset" )]
 	protected static void ResetCommand()
 	{
-		if ( Current != null && Current.IsValid )
-			Current.Reset();
+		Current?.Reset();
 	}
 }

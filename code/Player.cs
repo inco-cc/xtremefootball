@@ -6,8 +6,7 @@ using XtremeFootball.Teams;
 
 namespace XtremeFootball;
 
-[Category( "Xtreme Football" )]
-[Icon( "person" )]
+[Category( "Xtreme Football" ), Icon( "person" )]
 public partial class Player : AnimatedEntity
 {
 	private static readonly List<Player> all = new();
@@ -15,8 +14,16 @@ public partial class Player : AnimatedEntity
 
 	[Net] public BaseTeam Team { get; set; }
 
+	[ClientInput] public Vector3 MoveDirection { get; protected set; }
+	[ClientInput] public Rotation ViewRotation { get; set; }
+
+	[Net, Predicted] public Vector3 LocalEyePosition { get; set; } = new( 0, 0, 72 );
+	public Vector3 EyePosition => Transform.PointToWorld( LocalEyePosition );
+
 	public Player()
 	{
+		EnableLagCompensation = true;
+
 		all.Add( this );
 	}
 
@@ -32,5 +39,15 @@ public partial class Player : AnimatedEntity
 		base.OnDestroy();
 
 		all.Remove( this );
+	}
+
+	public override void FrameSimulate( IClient client )
+	{
+		base.FrameSimulate( client );
+
+		Camera.Rotation = ViewRotation;
+		Camera.Position = EyePosition;
+
+		Camera.FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
 	}
 }

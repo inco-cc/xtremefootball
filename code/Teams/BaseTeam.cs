@@ -11,8 +11,7 @@ public enum TeamSide
 	Away,
 }
 
-[Category( "Xtreme Football" )]
-[Icon( "groups" )]
+[Category( "Xtreme Football" ), Icon( "groups" )]
 public abstract partial class BaseTeam : Entity
 {
 	private static readonly List<BaseTeam> all = new();
@@ -23,7 +22,7 @@ public abstract partial class BaseTeam : Entity
 		get
 		{
 			foreach ( var team in all )
-				if ( team.Side == TeamSide.Home )
+				if ( team.Side is TeamSide.Home )
 					return team;
 
 			return null;
@@ -34,7 +33,7 @@ public abstract partial class BaseTeam : Entity
 		get
 		{
 			foreach ( var team in all )
-				if ( team.Side == TeamSide.Away )
+				if ( team.Side is TeamSide.Away )
 					return team;
 
 			return null;

@@ -5,8 +5,7 @@ using XtremeFootball.Items;
 
 namespace XtremeFootball.Announcers;
 
-[Category( "Xtreme Football" )]
-[Icon( "mic" )]
+[Category( "Xtreme Football" ), Icon( "mic" )]
 public abstract partial class BaseAnnouncer : Entity
 {
 	public static BaseAnnouncer Current { get; private set; }
@@ -17,8 +16,7 @@ public abstract partial class BaseAnnouncer : Entity
 	{
 		Transmit = TransmitType.Always;
 
-		if ( Current != null && Current.IsValid )
-			Current.Delete();
+		Current?.Delete();
 
 		Current = this;
 	}
@@ -47,7 +45,6 @@ public abstract partial class BaseAnnouncer : Entity
 	[ConCmd.Admin( "xf_announcer_say" )]
 	protected static void SayCommand( string phrase )
 	{
-		if ( Current != null && Current.IsValid )
-			Current.Say( phrase );
+		Current?.Say( phrase );
 	}
 }

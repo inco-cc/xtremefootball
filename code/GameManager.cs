@@ -4,6 +4,7 @@ using Editor;
 
 namespace XtremeFootball;
 
+[Category( "Xtreme Football" )]
 public partial class GameManager : Sandbox.GameManager
 {
 	public override void ClientJoined( IClient client )
@@ -19,7 +20,6 @@ public partial class GameManager : Sandbox.GameManager
 	{
 		base.ClientDisconnect( client, reason );
 
-		if ( client.Pawn != null && client.Pawn.IsValid )
-			client.Pawn.Delete();
+		client.Pawn?.Delete();
 	}
 }
