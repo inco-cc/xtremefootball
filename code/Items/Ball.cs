@@ -1,6 +1,7 @@
 ﻿using System;
 using Sandbox;
 using Editor;
+using XtremeFootball.Panels;
 
 namespace XtremeFootball.Items;
 
@@ -12,8 +13,10 @@ public partial class Ball : BaseItem
 	[Net] public Vector3 ResetPosition { get; protected set; }
 	[Net] public Rotation ResetRotation { get; protected set; }
 
-	private Sound flySound;
-	private float flySpeed;
+	private BallTimer Timer { get; set; }
+
+	private Sound FlySound { get; set; }
+	private float FlySpeed { get; set; }
 
 	public Ball()
 	{
@@ -26,7 +29,7 @@ public partial class Ball : BaseItem
 		}
 
 		if ( Game.IsClient )
-			flySound = PlaySound( "ball_fly" );
+			FlySound = PlaySound( "ball_fly" );
 
 		Current?.Delete();
 
@@ -40,6 +43,13 @@ public partial class Ball : BaseItem
 		SetModel( "models/roller.vmdl" );
 
 		LocalScale = .75f;
+	}
+
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		Timer = new( this );
 	}
 
 	protected override void OnDestroy()
@@ -88,18 +98,29 @@ public partial class Ball : BaseItem
 		_ = Current ?? new();
 	}
 
-	[Sandbox.GameEvent.Tick.Client]
+	[Sandbox.GameEvent.Client.Frame]
 	protected void UpdateSingSound()
 	{
-		flySpeed = MathX.Approach( flySpeed, Velocity.Length, Time.Delta * 3500 );
+		FlySpeed = MathX.Approach( FlySpeed, Velocity.Length, Time.Delta * 3500 );
 
 		if ( Owner is null )
 		{
-			flySound.SetVolume( MathF.Pow( MathX.Clamp( flySpeed / 1000, .05f, .9f ), .5f ) );
-			flySound.SetPitch( .75f + MathX.Clamp( flySpeed / 1500, 0, 1 ) );
+			FlySound.SetVolume( MathF.Pow( MathX.Clamp( FlySpeed / 1000, .05f, .9f ), .5f ) );
+			FlySound.SetPitch( .75f + MathX.Clamp( FlySpeed / 1500, 0, 1 ) );
 		}
 		else
-			flySound.SetVolume( 0 );
+			FlySound.SetVolume( 0 );
+	}
+
+	[Sandbox.GameEvent.Client.Frame]
+	protected void UpdateTimer()
+	{
+		Timer.Position = Position + Vector3.Up * 16;
+		Timer.Rotation = Camera.Rotation.RotateAroundAxis( Vector3.Up, 180 );
+
+		var distance = Camera.Position.Distance( Timer.Position );
+
+		Timer.WorldScale = MathF.Max( distance / 128, 1 );
 	}
 
 	[ConCmd.Admin( "xf_ball_reset" )]

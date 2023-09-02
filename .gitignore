@@ -8,6 +8,7 @@
 !/LICENSE*
 
 !/code/**/*.cs
+!/code/**/*.scss
 /code/obj/**
 /code/properties/**
 

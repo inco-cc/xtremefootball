@@ -12,8 +12,9 @@ public abstract partial class BaseItem : Prop
 	public static new IReadOnlyList<BaseItem> All => all.AsReadOnly();
 
 	[Net] public float ExpireTime { get; protected set; }
+	public float TimeUntilExpire => ExpireTime - Time.Now;
 	public virtual uint ExpireDelay { get; } = 20;
-	public bool IsExpired => Time.Now >= ExpireTime;
+	public bool IsExpired => ExpireTime > -1 && Time.Now >= ExpireTime;
 
 	public BaseItem()
 	{

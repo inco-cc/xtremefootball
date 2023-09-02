@@ -11,7 +11,7 @@ public partial class BlueTeam : BaseTeam
 	public override ColorHsv Color { get; } = new( 240, .8f, 1 );
 
 	[Sandbox.GameEvent.Entity.PostSpawn]
-	protected static void AutoCreate()
+	protected static void AutoSpawn()
 	{
 		_ = Away ?? new BlueTeam() { Side = TeamSide.Away };
 	}
