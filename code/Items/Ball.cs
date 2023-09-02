@@ -5,13 +5,17 @@ using XtremeFootball.Panels;
 
 namespace XtremeFootball.Items;
 
-[ClassName( "item_ball" ), Icon( "sports_football" ), HammerEntity]
+[Library( "prop_ball" )]
+[Icon( "sports_football" )]
+[HammerEntity]
 public partial class Ball : BaseItem
 {
 	public static Ball Current { get; private set; }
 
-	[Net] public Vector3 ResetPosition { get; protected set; }
-	[Net] public Rotation ResetRotation { get; protected set; }
+	[Net]
+	public Vector3 ResetPosition { get; protected set; }
+	[Net]
+	public Rotation ResetRotation { get; protected set; }
 
 	private BallTimer Timer { get; set; }
 

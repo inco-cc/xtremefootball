@@ -4,15 +4,33 @@ using Editor;
 
 namespace XtremeFootball.Teams;
 
-[ClassName( "team_red" ), HammerEntity]
+[Library( "info_team_red" )]
+[HammerEntity]
 public partial class RedTeam : BaseTeam
 {
+	public static RedTeam Current { get; private set; }
+
 	public override string Name { get; } = "Red Rhinos";
 	public override ColorHsv Color { get; } = new( 0, .8f, 1 );
+
+	public RedTeam()
+	{
+		Current?.Delete();
+
+		Current = this;
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+
+		if ( Current == this )
+			Current = null;
+	}
 
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoSpawn()
 	{
-		_ = Home ?? new RedTeam() { Side = TeamSide.Home };
+		_ = Current ?? new RedTeam();
 	}
 }

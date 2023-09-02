@@ -6,18 +6,23 @@ using XtremeFootball.Teams;
 
 namespace XtremeFootball;
 
-[Category( "Xtreme Football" ), Icon( "person" )]
+[Category( "Xtreme Football" )]
+[Icon( "person" )]
 public partial class Player : AnimatedEntity
 {
 	private static readonly List<Player> all = new();
 	public static new IReadOnlyList<Player> All => all.AsReadOnly();
 
-	[Net] public BaseTeam Team { get; set; }
+	[Net]
+	public BaseTeam Team { get; set; }
 
-	[ClientInput] public Vector3 MoveDirection { get; protected set; }
-	[ClientInput] public Rotation ViewRotation { get; set; }
+	[ClientInput]
+	public Vector3 MoveDirection { get; protected set; }
+	[ClientInput]
+	public Rotation ViewRotation { get; set; }
 
-	[Net, Predicted] public Vector3 LocalEyePosition { get; set; } = new( 0, 0, 72 );
+	[Net, Predicted]
+	public Vector3 LocalEyePosition { get; set; } = new( 0, 0, 72 );
 	public Vector3 EyePosition => Transform.PointToWorld( LocalEyePosition );
 
 	public Player()

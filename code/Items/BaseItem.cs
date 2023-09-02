@@ -5,13 +5,15 @@ using Editor;
 
 namespace XtremeFootball.Items;
 
-[Category( "Xtreme Football" ), Icon( "propane_tank" )]
+[Category( "Xtreme Football" )]
+[Icon( "propane_tank" )]
 public abstract partial class BaseItem : Prop
 {
 	private static readonly List<BaseItem> all = new();
 	public static new IReadOnlyList<BaseItem> All => all.AsReadOnly();
 
-	[Net] public float ExpireTime { get; protected set; }
+	[Net]
+	public float ExpireTime { get; protected set; }
 	public float TimeUntilExpire => ExpireTime - Time.Now;
 	public virtual uint ExpireDelay { get; } = 20;
 	public bool IsExpired => ExpireTime > -1 && Time.Now >= ExpireTime;

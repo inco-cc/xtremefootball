@@ -5,7 +5,8 @@ using XtremeFootball.Items;
 
 namespace XtremeFootball.Announcers;
 
-[Category( "Xtreme Football" ), Icon( "mic" )]
+[Category( "Xtreme Football" )]
+[Icon( "mic" )]
 public abstract partial class BaseAnnouncer : Entity
 {
 	public static BaseAnnouncer Current { get; private set; }
