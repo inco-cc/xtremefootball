@@ -7,6 +7,7 @@ namespace XtremeFootball.Items;
 
 [Library( "prop_ball" )]
 [Icon( "sports_football" )]
+[EditorModel( "models/roller.vmdl" )]
 [HammerEntity]
 public partial class Ball : BaseItem
 {

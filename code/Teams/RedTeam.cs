@@ -31,6 +31,7 @@ public partial class RedTeam : BaseTeam
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoSpawn()
 	{
-		_ = Current ?? new RedTeam();
+		if ( All.Count < 1 )
+			_ = new RedTeam();
 	}
 }

@@ -31,6 +31,7 @@ public partial class BlueTeam : BaseTeam
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoSpawn()
 	{
-		_ = Current ?? new BlueTeam();
+		if ( All.Count < 2 )
+			_ = new BlueTeam();
 	}
 }
