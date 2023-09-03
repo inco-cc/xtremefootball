@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Editor;
 using Sandbox;
-using Editor;
 using XtremeFootball.Teams;
 
 namespace XtremeFootball.Triggers;
 
-[Library( "trigger_goal_blue" )]
+[Library("trigger_goal_blue")]
 [HammerEntity]
 public partial class BlueGoalTrigger : BaseGoalTrigger
 {

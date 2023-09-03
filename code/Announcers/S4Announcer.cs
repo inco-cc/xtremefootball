@@ -1,10 +1,8 @@
-﻿using System;
-using Sandbox;
-using Editor;
+﻿using Editor;
 
 namespace XtremeFootball.Announcers;
 
-[ClassName( "announcer_s4" )]
+[ClassName("announcer_s4")]
 [HammerEntity]
 public partial class S4Announcer : BaseAnnouncer
 {

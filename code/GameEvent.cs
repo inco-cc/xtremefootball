@@ -1,6 +1,4 @@
-﻿using System;
-using Sandbox;
-using Editor;
+﻿using Sandbox;
 
 namespace XtremeFootball;
 
@@ -10,7 +8,7 @@ public static class GameEvent
 	{
 		public class Expire : EventAttribute
 		{
-			public Expire() : base( "item.expire" )
+			public Expire() : base("item.expire")
 			{
 			}
 		}
@@ -20,7 +18,7 @@ public static class GameEvent
 	{
 		public class Reset : EventAttribute
 		{
-			public Reset() : base( "ball.reset" )
+			public Reset() : base("ball.reset")
 			{
 			}
 		}
@@ -30,7 +28,7 @@ public static class GameEvent
 	{
 		public class Say : EventAttribute
 		{
-			public Say() : base( "announcer.say" )
+			public Say() : base("announcer.say")
 			{
 			}
 		}

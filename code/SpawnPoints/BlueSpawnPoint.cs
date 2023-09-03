@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Editor;
 using Sandbox;
-using Editor;
 using XtremeFootball.Teams;
 
 namespace XtremeFootball.SpawnPoints;
 
-[Library( "info_player_blue" )]
+[Library("info_player_blue")]
 [HammerEntity]
 public partial class BlueSpawnPoint : BaseSpawnPoint
 {

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sandbox;
-using Editor;
 
 namespace XtremeFootball.Items;
 
-[Category( "Xtreme Football" )]
-[Icon( "propane_tank" )]
+[Category("Xtreme Football")]
+[Icon("propane_tank")]
 public abstract partial class BaseItem : Prop
 {
 	private static readonly List<BaseItem> all = new();
@@ -14,20 +13,21 @@ public abstract partial class BaseItem : Prop
 
 	[Net]
 	public float ExpireTime { get; protected set; }
-	public float TimeUntilExpire => ExpireTime - Time.Now;
+	public bool IsExpirable => ExpireTime > -1;
+	public float TimeUntilExpire => MathF.Min(0, Time.Now - ExpireTime);
 	public virtual uint ExpireDelay { get; } = 20;
-	public bool IsExpired => ExpireTime > -1 && Time.Now >= ExpireTime;
+	public bool IsExpired => IsExpirable && Time.Now >= ExpireTime;
 
 	public BaseItem()
 	{
-		all.Add( this );
+		all.Add(this);
 	}
 
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
 
-		all.Remove( this );
+		all.Remove(this);
 	}
 
 	protected virtual void Expire()
@@ -48,9 +48,9 @@ public abstract partial class BaseItem : Prop
 	[Sandbox.GameEvent.Tick.Server]
 	protected void AutoExpire()
 	{
-		if ( IsExpired )
+		if (IsExpired)
 		{
-			Event.Run( "item.expire", this );
+			Event.Run("item.expire", this);
 
 			Expire();
 		}

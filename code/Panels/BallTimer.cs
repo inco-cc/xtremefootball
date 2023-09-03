@@ -1,48 +1,40 @@
 ﻿using System;
-using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
-using Editor;
 using XtremeFootball.Items;
 
-namespace XtremeFootball.Panels
+namespace XtremeFootball.Panels;
+
+public class BallTimer : WorldPanel
 {
-	public class BallTimer : WorldPanel
+	private Ball Ball { get; set; }
+	private Label Timer { get; set; }
+
+	public BallTimer(Ball ball)
 	{
-		private Ball Ball { get; set; }
+		Ball = ball;
+		Timer = new() { Id = "Timer" };
 
-		private Label Timer { get; set; }
+		AddChild(Timer);
 
-		public BallTimer( Ball ball )
-		{
-			Id = "BallTimer";
+		PanelBounds = new(-256, -256, 512, 512);
 
-			Ball = ball;
+		StyleSheet.Load("/code/Panels/BallTimer.scss");
+	}
 
-			Timer = new() { Id = "Timer" };
+	public override void OnHotloaded()
+	{
+		base.OnHotloaded();
+	}
 
-			AddChild( Timer );
+	public override void Tick()
+	{
+		base.Tick();
 
-			PanelBounds = new( -256, -256, 512, 512 );
+		var time = TimeSpan.FromSeconds(Ball.TimeUntilExpire);
 
-			StyleSheet.Load( "/code/Panels/BallTimer.scss" );
-		}
-
-		public override void OnHotloaded()
-		{
-			base.OnHotloaded();
-		}
-
-		public override void Tick()
-		{
-			base.Tick();
-
-			var time = TimeSpan.FromSeconds( Ball.TimeUntilExpire );
-
-			if ( Ball.TimeUntilExpire < (Ball.ExpireDelay / 2) )
-				Timer.Text = time.ToString("s'.'f");
-			else
-				Timer.Text = null;
-		}
+		if (Ball.IsExpirable && Ball.TimeUntilExpire < (Ball.ExpireDelay / 2))
+			Timer.Text = time.ToString("s'.'f");
+		else
+			Timer.Text = null;
 	}
 }

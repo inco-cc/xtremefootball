@@ -1,24 +1,20 @@
-﻿using System;
-using Sandbox;
-using Editor;
+﻿using Sandbox;
 
 namespace XtremeFootball;
 
-[Category( "Xtreme Football" )]
+[Category("Xtreme Football")]
 public partial class GameManager : Sandbox.GameManager
 {
-	public override void ClientJoined( IClient client )
+	public override void ClientJoined(IClient client)
 	{
-		base.ClientJoined( client );
+		base.ClientJoined(client);
 
-		var player = new Player();
-
-		client.Pawn = player;
+		client.Pawn = new Player();
 	}
 
-	public override void ClientDisconnect( IClient client, NetworkDisconnectionReason reason )
+	public override void ClientDisconnect(IClient client, NetworkDisconnectionReason reason)
 	{
-		base.ClientDisconnect( client, reason );
+		base.ClientDisconnect(client, reason);
 
 		client.Pawn?.Delete();
 	}

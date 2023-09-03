@@ -1,12 +1,10 @@
-﻿using System;
-using Sandbox;
-using Editor;
+﻿using Sandbox;
 using XtremeFootball.Items;
 
 namespace XtremeFootball.Announcers;
 
-[Category( "Xtreme Football" )]
-[Icon( "mic" )]
+[Category("Xtreme Football")]
+[Icon("mic")]
 public abstract partial class BaseAnnouncer : Entity
 {
 	public static BaseAnnouncer Current { get; private set; }
@@ -26,26 +24,26 @@ public abstract partial class BaseAnnouncer : Entity
 	{
 		base.OnDestroy();
 
-		if ( Current == this )
+		if (Current == this)
 			Current = null;
 	}
 
-	public void Say( string phrase )
+	public void Say(string phrase)
 	{
-		PlaySound( string.Format( PhraseSound, phrase ) );
+		PlaySound(string.Format(PhraseSound, phrase));
 
-		Event.Run( "announcer.say", this, phrase );
+		Event.Run("announcer.say", this, phrase);
 	}
 
 	[GameEvent.Ball.Reset]
-	protected void OnBallReset( Ball _ )
+	protected void OnBallReset(Ball _)
 	{
-		Say( "BallReset" );
+		Say("BallReset");
 	}
 
-	[ConCmd.Admin( "xf_announcer_say" )]
-	protected static void SayCommand( string phrase )
+	[ConCmd.Admin("xf_announcer_say")]
+	protected static void SayCommand(string phrase)
 	{
-		Current?.Say( phrase );
+		Current?.Say(phrase);
 	}
 }

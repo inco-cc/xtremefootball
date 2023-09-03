@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sandbox;
-using Editor;
 using XtremeFootball.SpawnPoints;
 
 namespace XtremeFootball.Teams;
 
-[Category( "Xtreme Football" )]
-[Icon( "groups" )]
+[Category("Xtreme Football")]
+[Icon("groups")]
 public abstract partial class BaseTeam : Entity
 {
 	private static readonly List<BaseTeam> all = new();
@@ -17,11 +15,11 @@ public abstract partial class BaseTeam : Entity
 	{
 		get
 		{
-			List<Player> players = new( Player.All );
+			List<Player> players = new(Player.All);
 
-			foreach ( var player in players )
-				if ( player.Team != this )
-					players.Remove( player );
+			foreach (var player in players)
+				if (player.Team != this)
+					players.Remove(player);
 
 			return players.AsReadOnly();
 		}
@@ -31,11 +29,11 @@ public abstract partial class BaseTeam : Entity
 	{
 		get
 		{
-			List<BaseSpawnPoint> spawnPoints = new( BaseSpawnPoint.All );
+			List<BaseSpawnPoint> spawnPoints = new(BaseSpawnPoint.All);
 
-			foreach ( var spawnPoint in spawnPoints )
-				if ( spawnPoint.Team != this )
-					spawnPoints.Remove( spawnPoint );
+			foreach (var spawnPoint in spawnPoints)
+				if (spawnPoint.Team != this)
+					spawnPoints.Remove(spawnPoint);
 
 			return spawnPoints;
 		}
@@ -51,13 +49,13 @@ public abstract partial class BaseTeam : Entity
 	{
 		Transmit = TransmitType.Always;
 
-		all.Add( this );
+		all.Add(this);
 	}
 
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
 
-		all.Remove( this );
+		all.Remove(this);
 	}
 }

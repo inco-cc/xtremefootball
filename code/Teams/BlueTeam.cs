@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Editor;
 using Sandbox;
-using Editor;
 
 namespace XtremeFootball.Teams;
 
-[Library( "info_team_blue" )]
+[Library("info_team_blue")]
 [HammerEntity]
 public partial class BlueTeam : BaseTeam
 {
 	public static BlueTeam Current { get; private set; }
 
 	public override string Name { get; } = "Blue Bulls";
-	public override ColorHsv Color { get; } = new( 240, .8f, 1 );
+	public override ColorHsv Color { get; } = new(240, .8f, 1);
 
 	public BlueTeam()
 	{
@@ -24,14 +23,14 @@ public partial class BlueTeam : BaseTeam
 	{
 		base.OnDestroy();
 
-		if ( Current == this )
+		if (Current == this)
 			Current = null;
 	}
 
 	[Sandbox.GameEvent.Entity.PostSpawn]
 	protected static void AutoSpawn()
 	{
-		if ( All.Count < 2 )
+		if (All.Count < 2)
 			_ = new BlueTeam();
 	}
 }

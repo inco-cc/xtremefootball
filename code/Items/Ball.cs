@@ -1,13 +1,13 @@
 ﻿using System;
-using Sandbox;
 using Editor;
+using Sandbox;
 using XtremeFootball.Panels;
 
 namespace XtremeFootball.Items;
 
-[Library( "prop_ball" )]
-[Icon( "sports_football" )]
-[EditorModel( "models/roller.vmdl" )]
+[Library("prop_ball")]
+[Icon("sports_football")]
+[EditorModel("models/roller.vmdl")]
 [HammerEntity]
 public partial class Ball : BaseItem
 {
@@ -27,14 +27,14 @@ public partial class Ball : BaseItem
 	{
 		Transmit = TransmitType.Always;
 
-		if ( Game.IsServer )
+		if (Game.IsServer)
 		{
 			ResetPosition = Position;
 			ResetRotation = Rotation;
 		}
 
-		if ( Game.IsClient )
-			FlySound = PlaySound( "ball_fly" );
+		if (Game.IsClient)
+			FlySound = PlaySound("ball_fly");
 
 		Current?.Delete();
 
@@ -45,7 +45,7 @@ public partial class Ball : BaseItem
 	{
 		base.Spawn();
 
-		SetModel( "models/roller.vmdl" );
+		SetModel("models/roller.vmdl");
 
 		LocalScale = .75f;
 	}
@@ -54,27 +54,27 @@ public partial class Ball : BaseItem
 	{
 		base.ClientSpawn();
 
-		Timer = new( this );
+		Timer = new(this);
 	}
 
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
 
-		if ( Current == this )
+		if (Current == this)
 			Current = null;
 	}
 
-	protected override void OnPhysicsCollision( CollisionEventData eventData )
+	protected override void OnPhysicsCollision(CollisionEventData eventData)
 	{
-		base.OnPhysicsCollision( eventData );
+		base.OnPhysicsCollision(eventData);
 
-		if ( eventData.Speed > 30 )
-			PlaySound( "ball_click" );
+		if (eventData.Speed > 30)
+			PlaySound("ball_click");
 
 		var normal = eventData.Velocity.Normal;
 
-		Velocity = (eventData.Speed * .75f * (2 * eventData.Normal * eventData.Normal.Dot( normal * -1 ) + normal));
+		Velocity = (eventData.Speed * .75f * (2 * eventData.Normal * eventData.Normal.Dot(normal * -1) + normal));
 	}
 
 	protected override void Expire()
@@ -84,7 +84,7 @@ public partial class Ball : BaseItem
 
 	public void Reset()
 	{
-		Sound.FromWorld( "ball_explode", Position );
+		Sound.FromWorld("ball_explode", Position);
 
 		Position = ResetPosition;
 		Rotation = ResetRotation;
@@ -94,7 +94,7 @@ public partial class Ball : BaseItem
 
 		ResetExpireTime();
 
-		Event.Run( "ball.reset", this );
+		Event.Run("ball.reset", this);
 	}
 
 	[Sandbox.GameEvent.Entity.PostSpawn]
@@ -106,29 +106,29 @@ public partial class Ball : BaseItem
 	[Sandbox.GameEvent.Client.Frame]
 	protected void UpdateSingSound()
 	{
-		FlySpeed = MathX.Approach( FlySpeed, Velocity.Length, Time.Delta * 3500 );
+		FlySpeed = MathX.Approach(FlySpeed, Velocity.Length, Time.Delta * 3500);
 
-		if ( Owner is null )
+		if (Owner is null)
 		{
-			FlySound.SetVolume( MathF.Pow( MathX.Clamp( FlySpeed / 1000, .05f, .9f ), .5f ) );
-			FlySound.SetPitch( .75f + MathX.Clamp( FlySpeed / 1500, 0, 1 ) );
+			FlySound.SetVolume(MathF.Pow(MathX.Clamp(FlySpeed / 1000, .05f, .9f), .5f));
+			FlySound.SetPitch(.75f + MathX.Clamp(FlySpeed / 1500, 0, 1));
 		}
 		else
-			FlySound.SetVolume( 0 );
+			FlySound.SetVolume(0);
 	}
 
 	[Sandbox.GameEvent.Client.Frame]
 	protected void UpdateTimer()
 	{
 		Timer.Position = Position + Vector3.Up * 16;
-		Timer.Rotation = Camera.Rotation.RotateAroundAxis( Vector3.Up, 180 );
+		Timer.Rotation = Camera.Rotation.RotateAroundAxis(Vector3.Up, 180);
 
-		var distance = Camera.Position.Distance( Timer.Position );
+		var distance = Camera.Position.Distance(Timer.Position);
 
-		Timer.WorldScale = MathF.Max( distance / 128, 1 );
+		Timer.WorldScale = MathF.Max(distance / 128, 1);
 	}
 
-	[ConCmd.Admin( "xf_ball_reset" )]
+	[ConCmd.Admin("xf_ball_reset")]
 	protected static void ResetCommand()
 	{
 		Current?.Reset();
