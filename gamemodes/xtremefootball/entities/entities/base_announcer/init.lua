@@ -3,6 +3,7 @@ AddCSLuaFile("cl_class_announcer.lua")
 
 include("shared.lua")
 include("sv_class_announcer.lua")
+include("sv_library_announcer.lua")
 
 function ENT:Initialize()
 	debug.setmetatable(self, debug.getregistry().Announcer)
