@@ -13,6 +13,8 @@ Announcer.MetaName = "Announcer"
 Announcer.MetaID = Entity.MetaID
 Announcer.MetaBaseClass = Entity
 
+Announcer.__newindex = Entity.__newindex
+
 function Announcer:__index(key)
 	if Announcer[key] ~= nil then
 		return Announcer[key]
