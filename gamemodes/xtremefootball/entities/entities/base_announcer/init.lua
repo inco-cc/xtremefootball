@@ -18,3 +18,7 @@ function ENT:Initialize()
 	self:AddEFlags(EFL_DONTWALKON)
 	self:AddEFlags(EFL_NO_PHYSCANNON_INTERACTION)
 end
+
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS
+end
