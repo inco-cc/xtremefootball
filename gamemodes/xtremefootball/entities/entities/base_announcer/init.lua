@@ -7,7 +7,10 @@ function ENT:Initialize()
 
 	announcer.Set(self)
 
-	self:AddEFlags(EFL_KEEP_ON_RECREATE_ENTITIES)
+	if not self:CreatedByMap() then
+		self:AddEFlags(EFL_KEEP_ON_RECREATE_ENTITIES)
+	end
+
 	self:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
 	self:AddEFlags(EFL_NO_THINK_FUNCTION)
 	self:AddEFlags(EFL_NO_GAME_PHYSICS_SIMULATION)
