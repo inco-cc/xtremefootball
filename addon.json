@@ -1,0 +1,10 @@
+{
+	"title": "Xtreme Football",
+	"type": "gamemode",
+	"tags": [ "fun", "cartoon" ],
+	"ignore": [
+		".git*",
+		"*.md",
+		"LICENSE"
+	]
+}
