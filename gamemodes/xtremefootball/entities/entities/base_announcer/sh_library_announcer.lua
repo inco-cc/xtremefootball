@@ -13,3 +13,11 @@ end
 function IsValid()
 	return Get():IsValid()
 end
+
+function Say(phrase)
+	local announcer = Get()
+
+	if announcer:IsValid() then
+		announcer:Say(phrase)
+	end
+end

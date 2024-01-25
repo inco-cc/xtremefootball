@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-local Entity = FindMetaTable("Entity")
+local Entity = debug.getregistry().Entity
 
 function Entity:IsAnnouncer()
 	return false
